@@ -1,3 +1,5 @@
+Kea 1.2.0-beta released on April 7, 2017
+
 1234.	[build]		fdupont
 	Improved installation procedure for kea-shell.
 	(Trac #5170, git 68a902fb723965ee6f5b7a8272224395917525cc)
@@ -144,7 +146,7 @@
 	(Github #45, git ce72998382b62269823fa0dcbfa41dfa9c72b69e)
 
 1209.	[func]		tomek
-	Relay options are now printed in DHCPv6 when suffiently detailed
+	Relay options are now printed in DHCPv6 when sufficiently detailed
 	debug logging is requested.
 	(Trac #5131, git 5bf58b21fcf07f2e2e97275efa1f76cde913b30a)
 
