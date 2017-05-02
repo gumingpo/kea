@@ -70,23 +70,18 @@ int load(LibraryHandle&) {
     try {
         // Instantiate the registry.
         user_registry.reset(new UserRegistry());
-
         // Create the data source.
         UserDataSourcePtr user_file(new UserFile(registry_fname));
-
         // Set the registry's data source
         user_registry->setSource(user_file);
-
         // Do an initial load of the registry.
         user_registry->refresh();
-
         // zero out the errno to be safe
         errno = 0;
 
         // Open up the output file for user_chk results.
         user_chk_output.open(user_chk_output_fname,
                      std::fstream::out | std::fstream::app);
-
         if (!user_chk_output) {
             // Grab the system error message.
             const char* errmsg = strerror(errno);
@@ -97,8 +92,7 @@ int load(LibraryHandle&) {
     }
     catch (const std::exception& ex) {
         // Log the error and return failure.
-        LOG_ERROR(user_chk_logger, USER_CHK_HOOK_LOAD_ERROR)
-            .arg(ex.what());
+        LOG_ERROR(user_chk_logger, USER_CHK_HOOK_LOAD_ERROR).arg(ex.what());
         ret_val = 1;
     }
 
@@ -119,8 +113,8 @@ int unload() {
     } catch (const std::exception& ex) {
         // On the off chance something goes awry, catch it and log it.
         // @todo Not sure if we should return a non-zero result or not.
-        LOG_ERROR(user_chk_logger, USER_CHK_HOOK_UNLOAD_ERROR)
-            .arg(ex.what());
+        //LOG_ERROR(user_chk_logger, USER_CHK_HOOK_UNLOAD_ERROR)
+        //    .arg(ex.what());
     }
 
     return (0);
