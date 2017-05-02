@@ -1,3 +1,8 @@
+.cproject
+.project
+.autotools
+.settings/language.settings.xml
+src/bin/shell/tests/shell_unittest.py
 *.gcda
 *.gcno
 *.gcov
