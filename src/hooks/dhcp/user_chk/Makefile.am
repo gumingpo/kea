@@ -24,6 +24,7 @@ CLEANFILES = *.gcno *.gcda user_chk_messages.h user_chk_messages.cc s-messages
 lib_LTLIBRARIES = libdhcp_user_chk.la
 
 libdhcp_user_chk_la_SOURCES =
+libdhcp_user_chk_la_SOURCES += udp_client.h udp_client.cc
 libdhcp_user_chk_la_SOURCES += load_unload.cc
 libdhcp_user_chk_la_SOURCES += pkt_receive_co.cc
 libdhcp_user_chk_la_SOURCES += pkt_send_co.cc
