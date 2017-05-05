@@ -113,8 +113,8 @@ int unload() {
     } catch (const std::exception& ex) {
         // On the off chance something goes awry, catch it and log it.
         // @todo Not sure if we should return a non-zero result or not.
-        //LOG_ERROR(user_chk_logger, USER_CHK_HOOK_UNLOAD_ERROR)
-        //    .arg(ex.what());
+        LOG_ERROR(user_chk_logger, USER_CHK_HOOK_UNLOAD_ERROR)
+            .arg(ex.what());
     }
 
     return (0);

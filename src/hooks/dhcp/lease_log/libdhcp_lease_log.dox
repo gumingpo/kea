@@ -1,0 +1,112 @@
+// Copyright (C) 2017- Internet Systems Consortium, Inc. ("ISC")
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+/**
+@page libdhcp_lease_log DHCP Lease Log Hooks Library
+
+@section libdhcp_lease_logIntro lease_log: An Example Hooks Library
+## Introduction
+lease_log is an example hooks library which customizes the DHCP leaes allocation
+provided by Kea DHCP server modules (kea-dhcp4 and kea-dhcp6).
+
+The source code is provided in the src/hooks/dhcp/lease_log directory.
+
+## Callout Processing
+The library implements callouts for lease4_select triggered by DHDPREQUEST instead of DHCPDISCOVER
+-# "lease4_select" callout is invoked:
+    -# collect hwtype,hwaddr and ipv4 address
+    -# send "hwtype,hwaddr,ipv4-address" to the configued udp server 
+
+## Using the library
+Two steps are required in order to use the library:
+-# The Kea DHCP module(s) must be configured to load the library
+-# Setup one UDP socket server
+
+### Configuring the DHCP Modules
+
+It must be configured as a hook library for the desired DHCP server modules.
+Note that the lease_log library is installed alongside the Kea libraries in
+"<install-dir>/lib" where <install-dir> is determined by the --prefix option of
+the configure script.  It defaults to "/usr/local". Assuming the default value
+then, configuring kea-dhcp4 to load the lease_log library could be done with the
+following Kea4 configuration:
+
+@code
+"Dhcp4":
+{
+    "control-socket": {
+        "socket-type": "unix",
+        "socket-name": "/tmp/kea-ctrl-dhcp4.sock"
+    },
+# Add names of interfaces to listen on.
+  "interfaces-config": {
+    "interfaces": ["*" ]
+  },
+
+# Use Memfile lease database backend to store leases in a CSV file.
+  "lease-database": {
+    "type": "memfile"
+  },
+
+# Setup reclamation of the expired leases and leases affinity.
+# Expired leases will be reclaimed every 10 seconds. Every 25
+# seconds reclaimed leases, which have expired more than 3600
+# seconds ago, will be removed. The limits for leases reclamation
+# are 100 leases or 250 ms for a single cycle. A warning message
+# will be logged if there are still expired leases in the
+# database after 5 consecutive reclamation cycles.
+  "expired-leases-processing": {
+    "reclaim-timer-wait-time": 10,
+    "flush-reclaimed-timer-wait-time": 25,
+    "hold-reclaimed-time": 3600,
+    "max-reclaim-leases": 100,
+    "max-reclaim-time": 250,
+    "unwarned-reclaim-cycles": 5
+  },
+
+# Global (inherited by all subnets) lease lifetime is mandatory parameter.
+  "valid-lifetime": 4000,
+
+# Below an example of the simple subnet declaration. Uncomment to
+# enable it. This is a list, denoted with [ ], of structure, denoted
+# with { }. Each structure describes a single subnet and may have
+# several parameters. One of those parameters is "pools" that is
+# also a list of structures.
+  "subnet4": [
+     {    
+       "subnet": "192.168.1.0/24",
+       "id":1024,
+       "pools": [ { "pool": "192.168.1.3 - 192.168.1.252" } ] 
+     }
+  ],
+  "option-data": [
+        {
+           "name": "routers",
+           "data": "192.168.1.1"
+        },
+        {
+           "name": "domain-name-servers",
+           "data": "8.8.8.8"
+        }
+   ],
+  "hooks-libraries": [ 
+                       {
+                          "library":"/opt/kea/lib/libdhcp_lease_log.dylib"
+                          "parameters": {
+                              "server":"127.0.0.1"
+                              "port":8888
+                          }
+                       }
+                     ]
+},
+@endcode
+
+## Setup UDP socket server listening on configured server/port
+Use case 1. auto-connect UAV
+1) configure UAV to be wifi-client-mode to get ipv4@ from specified kea dhcp server
+2) send lease notification via udp socket when one lease(i.e. ipv4@) is allocated
+3) automatically connect UAV
+*/

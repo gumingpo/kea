@@ -20,7 +20,6 @@
 #include <dhcp/pkt4.h>
 #include <dhcp/pkt6.h>
 #include <user_chk.h>
-#include "udp_client.h"
 
 using namespace isc::dhcp;
 using namespace isc::hooks;
@@ -368,11 +367,6 @@ void generate_output_record(const std::string& id_type_str,
     // @todo Flush is here to ensure output is immediate for demo purposes.
     // Performance would generally dictate not using it.
     flush(user_chk_output);
-
-    //to send to udp socket server
-    char buf[512] = "";
-    sprintf(buf,"%s,%s,%s,%s",id_type_str.c_str(), id_val_str.c_str(), addr_str.c_str(), (registered ? "yes" : "no"));
-    udp_send(buf,strlen(buf));
 }
 
 /// @brief Stringify the lease address or prefix IPv6 response packet

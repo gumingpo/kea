@@ -3,7 +3,8 @@
 */
 #include <udp_client.h>
 extern "C" {
-	int udp_send(char *msg, int msglen)
+    struct UDP_SERVER udpServer;
+	int udp_send(char *msg, int msglen, char *server, int port)
 	{
 		struct sockaddr_in si_other;
 		int slen=sizeof(si_other);
@@ -12,20 +13,30 @@ extern "C" {
 		if(msg == 0 || msg[0] == '\0' || msglen <= 0) {
             return -1;
 		}
+		if(server == NULL || server[0] == '\0') {
+			perror("udp server is not configured");
+			return -2;
+		}
+
+		if(port == 0) {
+			perror("udp server port is not configured");
+			return -3;
+		}
+
 		if ( (sock=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
 		{
 			perror("failed to create socket");
-			return -2;
+			return -4;
 		}
 
 		memset((char *) &si_other, 0, slen);
 		si_other.sin_family = AF_INET;
-		si_other.sin_port = htons(PORT);
+		si_other.sin_port = htons(port);
 
-		if (inet_aton(SERVER , &si_other.sin_addr) == 0)
+		if (inet_aton(server , &si_other.sin_addr) == 0)
 		{
 			perror("failed to convert ip address\n");
-			return -3;
+			return -5;
 		}
 
 		//send the message
