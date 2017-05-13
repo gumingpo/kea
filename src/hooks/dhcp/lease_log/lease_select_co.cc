@@ -73,7 +73,7 @@ extern "C" {
 			char buf[BUFLEN] = "";
 			sprintf(buf,"%s,%s,lease4_release",lease4->addr_.toText().c_str(), lease4->hwaddr_->toText().c_str());
 			LOG_INFO(lease_log_logger, "[lease4_release] lease:%1").arg(buf);
-//	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
+	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
 		} catch (const exception& ex) {
 			LOG_ERROR(lease_log_logger, LEASE_LOG_SUBNET4_SELECT_ERROR)
 					.arg(ex.what());
@@ -91,7 +91,7 @@ extern "C" {
 			char buf[BUFLEN] = "";
 			sprintf(buf,"%s,%s,lease4_decline",lease4->addr_.toText().c_str(), lease4->hwaddr_->toText().c_str());
 			LOG_INFO(lease_log_logger, "[lease4_decline] lease:%1").arg(buf);
-//	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
+	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
 		} catch (const exception& ex) {
 			LOG_ERROR(lease_log_logger, LEASE_LOG_SUBNET4_SELECT_ERROR)
 					.arg(ex.what());
@@ -109,7 +109,7 @@ extern "C" {
 			char buf[BUFLEN] = "";
 			sprintf(buf,"%s,%s,lease4_expire",lease4->addr_.toText().c_str(), lease4->hwaddr_->toText().c_str());
 			LOG_INFO(lease_log_logger, "[lease4_expire] lease:%1").arg(buf);
-//	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
+	        udp_send(buf,strlen(buf), udpServer.server, udpServer.port);
 		} catch (const exception& ex) {
 			LOG_ERROR(lease_log_logger, LEASE_LOG_SUBNET4_SELECT_ERROR)
 					.arg(ex.what());
